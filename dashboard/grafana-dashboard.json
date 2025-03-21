@@ -1,0 +1,557 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_GRAFANACLOUD-HNW-LOGS",
+      "label": "grafanacloud-hnw-logs",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.6.0-84846"
+    },
+    {
+      "type": "datasource",
+      "id": "loki",
+      "name": "Loki",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "inverted",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.6.0-84846",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (level) (count_over_time({service_name=\"email-routing\",level=\"info\"} ${status_filter}\n [$__range]))\nor\nsum by (status) (count_over_time({service_name=\"email-routing\",level=\"error\"} | json ${status_filter}\n [$__range]))\n",
+          "instant": false,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "{status=\"dropped\"}",
+                "{status=\"error\"}",
+                "{status=\"deliveryFailed\"}",
+                "{level=\"info\"}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{level=\"info\"}",
+            "renamePattern": "Forwarded"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"dropped\"}",
+            "renamePattern": "Dropped"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"deliveryFailed\"}",
+            "renamePattern": "Delivery Failed"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"error\"}",
+            "renamePattern": "Other"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 17,
+        "x": 7,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "timezone": [
+          "Asia/Tokyo"
+        ],
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0-84846",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum by (level) (count_over_time({service_name=\"email-routing\",level=\"info\"} ${status_filter}\n [1h]))\nor\nsum by (status) (count_over_time({service_name=\"email-routing\",level=\"error\"} | json ${status_filter}\n [1h]))\n",
+          "instant": false,
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Email Routing Summary",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "{status=\"dropped\"}",
+                "{status=\"error\"}",
+                "{status=\"deliveryFailed\"}",
+                "{level=\"info\"}"
+              ]
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{level=\"info\"}",
+            "renamePattern": "Forwarded"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"dropped\"}",
+            "renamePattern": "Dropped"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"deliveryFailed\"}",
+            "renamePattern": "Delivery Failed"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "{status=\"error\"}",
+            "renamePattern": "Other"
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "links": [
+            {
+              "title": "Drilldown",
+              "url": "https://hnw.grafana.net/a/grafana-lokiexplore-app/explore/service/email-routing/logs?patterns=%5B%5D&from=now-14d&to=now&var-ds=grafanacloud-logs&var-filters=service_name%7C%3D%7Cemail-routing&var-levels=detected_level%7C%3D%7Cerror&var-metadata=&var-patterns=&var-lineFilterV2=&var-lineFilters=&timezone=browser&urlColumns=%5B%5D&visualizationType=%22logs%22&displayedFields=%5B%5D&sortOrder=%22Descending%22&wrapLogMessage=false&var-fields=from%7C%3D%7C%7B%22value%22:%22${__data.fields[0]}%22__gfc__%22parser%22:%22json%22%7D,${__data.fields[0]}&var-fields=to%7C%3D%7C%7B%22value%22:%22${__data.fields[1]}%22__gfc__%22parser%22:%22json%22%7D,${__data.fields[1]}&var-all-fields=from%7C%3D%7C%7B%22value%22:%22${__data.fields[0]}%22__gfc__%22parser%22:%22json%22%7D,${__data.fields[0]}&var-all-fields=to%7C%3D%7C%7B%22value%22:%22${__data.fields[1]}%22__gfc__%22parser%22:%22json%22%7D,${__data.fields[1]}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "差出人"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 389
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "カスタム アドレス"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 211
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "サブジェクト"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 341
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "受信時刻"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 175
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "受信時刻"
+          }
+        ]
+      },
+      "pluginVersion": "11.6.0-84846",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${DS_GRAFANACLOUD-HNW-LOGS}"
+          },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{service_name=\"email-routing\", level=\"error\"} | json ${status_filter}",
+          "legendFormat": "",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "エラーメール一覧",
+      "transformations": [
+        {
+          "id": "extractFields",
+          "options": {
+            "delimiter": ",",
+            "format": "json",
+            "jsonPaths": [
+              {
+                "alias": "差出人",
+                "path": "from"
+              },
+              {
+                "alias": "カスタム アドレス",
+                "path": "to"
+              },
+              {
+                "alias": "サブジェクト",
+                "path": "subject"
+              },
+              {
+                "alias": "受信時刻",
+                "path": "datetime"
+              }
+            ],
+            "keepTime": false,
+            "replace": true,
+            "source": "Line"
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "destinationType": "time",
+                "targetField": "受信時刻"
+              }
+            ],
+            "fields": {}
+          }
+        },
+        {
+          "id": "formatTime",
+          "options": {
+            "outputFormat": "YYYY-MM-DD HH:mm:ss",
+            "timeField": "受信時刻",
+            "timezone": "Asia/Tokyo",
+            "useTimezone": true
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "#",
+          "value": "#"
+        },
+        "description": "",
+        "label": "Error status",
+        "name": "status_filter",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "#"
+          },
+          {
+            "selected": false,
+            "text": "Dropped",
+            "value": "| status=\"dropped\""
+          },
+          {
+            "selected": false,
+            "text": "Other",
+            "value": "| status=\"error\""
+          },
+          {
+            "selected": false,
+            "text": "Delivery Failed",
+            "value": "| status=\"deliveryFailed\""
+          }
+        ],
+        "query": "All : #,Dropped : | status=\"dropped\",Other : | status=\"error\",Delivery Failed : | status=\"deliveryFailed\"",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-14d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Email Log Dashboard",
+  "uid": "bebqtki1fqrcwc",
+  "version": 39,
+  "weekStart": ""
+}
